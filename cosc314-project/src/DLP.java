@@ -14,8 +14,8 @@ public class DLP {
 	public void insertValues() {
 		Scanner input = new Scanner(System.in);
 		this.prime = 0;
-		this.root = 14;
-		this.mod = 19;
+		this.root = 3;
+		this.mod = 71;
 	}
 
 	public void findPowers() {
@@ -26,7 +26,7 @@ public class DLP {
 		while(i < mod) {
 			result = recursiveHelper(1, root, i);
 			
-			map.put(i,(result % 19));
+			map.put(i + 1,(result % mod));
 			i++;
 		}
 		showLogs(map);
@@ -35,7 +35,7 @@ public class DLP {
 	public int recursiveHelper(int n, int root, int count) {
 		n = n * root;
 		if(n > root) {
-			n = n % 19;
+			n = n % mod;
 		}
 		return count == 0 ? n : recursiveHelper(n, root, count - 1);
 	}
