@@ -17,7 +17,7 @@ public class TextConverter {
 		return sum;
 	}
 	
-	public void convertToText(int num) {
+	public String convertToText(int num) {
 		StringBuilder builder = new StringBuilder();
 		int val = 0;
 		int count = 0;
@@ -32,11 +32,10 @@ public class TextConverter {
 			letter = (char) (val + 65);
 			builder.append(letter);
 			sum = sum  + val * (int) Math.pow(26, count);
-			System.out.println(sum);
 			count++;
 		}
 		builder.reverse();
-		System.out.println(builder.toString());
+		return builder.toString();
 		
 	}
 	
