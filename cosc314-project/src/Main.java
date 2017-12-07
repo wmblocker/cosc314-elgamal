@@ -6,68 +6,79 @@ public class Main {
 	public static int aliceNum = 0;
 	
 	public static void main(String[] args) {
-		int root = 15;
-		int mod = 26;
-		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		Scanner input = new Scanner(System.in);
+		TextConverter converter = new TextConverter();
+		String text = "";
+
+		System.out.println("Enter some text to encrypt: ");
+		text = input.nextLine();
 		
-		DLP dlp = new DLP();
-		Euclidean euclid = new Euclidean();
-		RepeatedSquare repeat = new RepeatedSquare(root, mod);
-		
-		//map = repeat.mapValues();
-		//System.out.println(dlp.search(map, 10));
-		System.out.println(euclid.findInverse(root, mod));
-		//System.out.println(convertToNum("DOG"));
-		//convertToText(2398);
+		int x = 14;
 		int p = 43;
-		int a = 3;
-		int n = 43;
-		int r = 26;
-		int s = 7;
-		int ct = 0;
-		//dlp.findPowers();
+		int root = 3;
+		int mod = 43;
+		int bobRandom = 26;
+		int aliceRandom = 7;
+		
+		
+		System.out.println("Text converted to number: " + converter.convertToNum(text));
+		Key ct = encrypt(x, p, root, mod, aliceRandom, bobRandom);
+		System.out.println("Ciphertext: " + ct.toString());
+		String pt = decrypt(ct, x, p, root, mod, aliceRandom, bobRandom);
+		
+		System.out.println(pt);
 		//System.out.println(122500 % 19);
-		//System.out.println(encrypt(p, a, n, r, s));
+		//System.out.println(ct.toString());
 		//System.out.println(decrypt(ct, p, a, n, r, s));
 	}
 	
 
-	public static long encrypt(int p, int a, int n, int r, int s) {
-		int bobKey = 0;
+	public static Key encrypt(int x, int p, int root, int mod, int aliceRandom, int bobRandom) {
+		HashMap<Integer, Integer> map1 = new HashMap<Integer, Integer>();
+		DLP dlp1 = new DLP();
+		RepeatedSquare repeat1 = new RepeatedSquare(root, mod);
+		
 		int aliceKey = 0;
-		long key = 0L;
+		int y1 = 0;
+		int y2;
+			
+		map1 = repeat1.mapValues();
+		y1 = map1.get(bobRandom);
+	
+		HashMap<Integer, Integer> map2 = new HashMap<Integer, Integer>();
+		DLP dlp2 = new DLP();
+		RepeatedSquare repeat2 = new RepeatedSquare(root, mod);
 		
-		bobKey = (int)((Math.pow(a, r)) % n);
-		bobNum = bobKey;
-		aliceKey = (int)((Math.pow(a, s)) % n);
-		aliceNum = aliceKey;
-		key = (long)(Math.pow(37, 26)) % 43;
+		map2 = repeat2.mapValues();
 		
-		return key % 43;
+		aliceKey = map2.get(aliceRandom);
 		
+		HashMap<Integer, Integer> map3 = new HashMap<Integer, Integer>();
+		DLP dlp3 = new DLP();
+		RepeatedSquare repeat3 = new RepeatedSquare(aliceKey, mod);
+		
+		map3 = repeat3.mapValues();
+		y2 = (map3.get(bobRandom) * x) % mod;
+		
+		Key cipher = new Key(y1, y2);
+		return cipher;
 	}
 	
-	public static int decrypt(int ct, int p, int a, int n, int r, int s) {
-		int bobKey = 0;
-		int aliceKey = 0;
-		int key = 0;
+	public static String decrypt(Key cipher, int x, int p, int root, int mod, int aliceRandom, int bobRandom ) {
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		DLP dlp = new DLP();
+		RepeatedSquare repeat = new RepeatedSquare(cipher.getY1(), 43);
+		Euclidean euclid = new Euclidean();
 		
-		bobKey = (int)(Math.pow(bobNum, 7)) % n;
+		map = repeat.mapValues();
 		
-		int count = 0;
-		int num = 0;
-		while(count != 43) {
-			key = (bobKey * count) % 43;
-			if(key == 1) {
-				num = count;
-				count = 43;
-			}
-			else {
-				count++;
-			}
-		}
+		int y = map.get(aliceRandom);
 		
-		return (num * ct) % 43;
+		y = euclid.findInverse(y, mod);
+		y = y * cipher.y2;
+		System.out.println(y % 43);
+		
+		return "";
 	}
 	
 	

@@ -1,6 +1,7 @@
 
 public class TextConverter {
-	public static int convertToNum(String text) {
+	
+	public int convertToNum(String text) {
 		text = text.toUpperCase();
 		int retVal = 0;
 		int count = 0;
@@ -16,7 +17,7 @@ public class TextConverter {
 		return sum;
 	}
 	
-	public static void convertToText(int num) {
+	public void convertToText(int num) {
 		StringBuilder builder = new StringBuilder();
 		int val = 0;
 		int count = 0;
