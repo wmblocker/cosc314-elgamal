@@ -16,6 +16,8 @@ public class RepeatedSquare {
 		int result = 0;
 		int i = 0;
 			
+		//While the count is less than the mod, recursively populate the HashMap with the
+		//powers of the root
 		while(i < mod) {
 			result = recursiveHelper(1, root, i);
 			
@@ -26,10 +28,15 @@ public class RepeatedSquare {
 	}
 	
 	public int recursiveHelper(int n, int root, int count) {
+		//Multiply n by the root
 		n = n * root;
-		if(n > root) {
+		
+		//if n is greater than mod 
+		if(n > mod) {
 			n = n % mod;
 		}
+		
+		//if the count is not equal to 0 then continue, else return the value and map it.
 		return count == 0 ? n : recursiveHelper(n, root, count - 1);
 	}
 
